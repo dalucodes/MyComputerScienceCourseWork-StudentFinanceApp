@@ -1,27 +1,28 @@
-"""making a salt
-"""
-import os 
-salt =os.urandom(16)
-# print("salt:", salt)
-# print("Saltlength:", len(salt))
 
-"""Hashing a password with a salt"""
+import os 
 import hashlib 
-password = b"Hello123"
-hashed= hashlib.pbkdf2_hmac("sha256",password,salt,100000)
-# print("Hashed password:", hashed)
-# print("Hashed length:", len(hashed))
-user_record = {
+def hash_password(password):
+    salt =os.urandom(16)
+    iterations= 100000
+    hashed= hashlib.pbkdf2_hmac("sha256",password,salt,iterations)
+    dataBase = {
     "salt":salt,
     "hash": hashed,
     "iterations": 100000
-}
-
-def password_verification(password,salt,hash, iterations):
-    real_password = hashlib.pbkdf2_hmac("sha256", password, salt, iterations)
-    if real_password == hash:
+    }
+    return dataBase
+def password_verification(password,record):
+    real_password = hashlib.pbkdf2_hmac("sha256", password, record["salt"], record["iterations"])
+    if real_password == record["hash"]:
         return True
     else:
         return False 
     
-print(password_verification(password,user_record["salt"],user_record["hash"],user_record["iterations"]))
+user_input= input("Create a password").encode()
+user_record = hash_password(user_input)
+
+login_input = input("Enter your password: ").encode()
+if password_verification(login_input,user_record) == True:
+    print("Acess granted")
+else:
+    print("access denied")
