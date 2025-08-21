@@ -3,6 +3,19 @@ import os
 conn= sqlite3.connect("finance.db")
 c=conn.cursor()
 
+c.execute(
+    """CREATE TABLE Users(
+        id INTEGER PRIMARY KEY AUTOINCREMENT ,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        salt TEXT NOT NULL, 
+        iterations INTEGER NOT NULL
+
+    )""")
+conn.commit()
+
+
 
 
 
