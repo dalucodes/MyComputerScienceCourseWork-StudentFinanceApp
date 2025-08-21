@@ -12,11 +12,10 @@ def hash_password(password):
         return None
     salt =os.urandom(16)
     hashed= hashlib.pbkdf2_hmac("sha256",password,salt,ITERATIONS)
+      #Db doesn't like raw binary in text fields
+        #salt and hashed are bytes objects(basically raw bnary)
     return{
-        """
-        Db doesn't like raw binary in text fields
-        salt and hashed are bytes objects(basically raw bnary)
-        """
+
     "salt":salt.hex(),
     "hash": hashed.hex(),
     "iterations": ITERATIONS
@@ -27,8 +26,8 @@ def password_verification(password,record):
         """Changing salt and hash back to binary"""
         salt_bytes = bytes.fromhex(record["salt"])
         hash_bytes = bytes.fromhex(record["hash"])
-        real_password = hashlib.pbkdf2_hmac("sha256", password, record["salt"], record["iterations"])
-        if real_password == record["hash"]:
+        real_password = hashlib.pbkdf2_hmac("sha256",password, salt_bytes, record["iterations"])
+        if real_password == hash_bytes:
             return True
     except KeyError as err:
         print("Record is missing a field:", err)
