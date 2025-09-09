@@ -50,33 +50,35 @@ def read_password(prompt):
         return None
     return txt.encode()   
 
-#signup
-user_input = None
-while user_input is None:
-    user_input = read_password("Create a password: ")
 
-user_record = hash_password(user_input)
+if __name__ == "__main__":
 
-#restricted login after 5 attempts 
-MAX_ATTEMPTS =5
-LOCK_SECONDS = 15
-attempts = 0
+    user_input = None
+    while user_input is None:
+        user_input = read_password("Create a password: ")
 
-while True:
-    if attempts >= MAX_ATTEMPTS:
-        print(f"Too many attempts. Please wait for {LOCK_SECONDS} seconds...")
-        time.sleep(LOCK_SECONDS)
-        attempts =0
-    login_txt = getpass("Enter your password:").strip()
-    if login_txt =="":
-        print("Password can not be empty.")
-        continue
-    login_txt =login_txt.encode()
-    if password_verification(login_txt, user_record):
-        print("Acess granted")
-        break
-    else:
-        attempts +=1
-        remaining =MAX_ATTEMPTS -attempts
-        if remaining >0:
-            print(f"Acess Denied. {remaining} attempts left.")
+    user_record = hash_password(user_input)
+
+    #restricted login after 5 attempts 
+    MAX_ATTEMPTS =5
+    LOCK_SECONDS = 15
+    attempts = 0
+
+    while True:
+        if attempts >= MAX_ATTEMPTS:
+            print(f"Too many attempts. Please wait for {LOCK_SECONDS} seconds...")
+            time.sleep(LOCK_SECONDS)
+            attempts =0
+        login_txt = getpass("Enter your password:").strip()
+        if login_txt =="":
+            print("Password can not be empty.")
+            continue
+        login_txt =login_txt.encode()
+        if password_verification(login_txt, user_record):
+            print("Acess granted")
+            break
+        else:
+            attempts +=1
+            remaining =MAX_ATTEMPTS -attempts
+            if remaining >0:
+                print(f"Acess Denied. {remaining} attempts left.")
