@@ -44,6 +44,27 @@ def get_user_email(email):
     }
 
 
+def create_user_email(name, email, password):
+    name_clean = name.strip()
+    email_clean = email.strip().lower()
+    record = security.hash_password(password)
+    if record is None:
+        print("Failed to hash password.")
+        return None
+    try:
+        query = "INSERT INTO Users (name, email, password_hash, salt, iterations)VALUES (?, ?, ?, ?, ?)"
+        c.execute(query, (
+            name_clean,
+            email_clean,
+            record["hash"],
+            record["salt"],
+            record["iterations"]
+        ))
+        conn.commit()
+        return c.lastrowid  
+    except TypeError as err:
+        print("Error: That email is already in use.")
+        return None
 
 
 
