@@ -66,10 +66,24 @@ def create_user_email(name, email, password):
         print("Error: That email is already in use.")
         return None
 
-
-
-
-
+def verify_user(email, password):
+    user_record= get_user_email(email)
+    if user_record is None:
+        print("No account found for that email")
+        return False
+    passwordToByte= password.encode()
+    record ={
+       " salt" :user_record["salt"],
+        "hash": user_record["password_hash"],     
+        "iterations": user_record["iterations"] 
+    }
+    if security.password_verification(passwordToByte,record):
+        print("Access granted")
+        return True
+    else:
+        print("Access denied")
+        return False
+    
 
 
 
@@ -92,3 +106,4 @@ def create_user_email(name, email, password):
 
 # c.execute("SELECT sqlite_version();") #checking the version of sql
 # print(c.fetchone())# printing the version
+15243566
