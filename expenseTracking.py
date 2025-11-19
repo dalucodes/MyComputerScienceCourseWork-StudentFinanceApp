@@ -7,8 +7,6 @@ def addexpenses():
             break
         except ValueError:
             print("Input valid date in format YYYY-DD-MM example(2025-12-05)")
-
-    
     while True:
         try:
             amount =int(input("How much did you spend today"))
@@ -18,9 +16,6 @@ def addexpenses():
                 break
         except ValueError:
             print("Please enter a valid number")
-            print(ValueError)
-        print("Amount can not be less than 0")
-       
     category=input("Food, Bills etc")
     merchant = input("What is the name of the store")
     max_length = 100
